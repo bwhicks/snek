@@ -1,0 +1,21 @@
+FROM python:3.9-alpine AS base
+
+ENV PYTHONUNBUFFERED=1 \
+  PIP_NO_CACHE_DIR=off \
+  PIP_DISABLE_PIP_VERSION_CHECK=on \
+  PIP_DEFAULT_TIMEOUT=100 \
+  \
+  POETRY_VERSION=1.1.4 \
+  # do not ask any interactive question
+  POETRY_NO_INTERACTION=1
+
+RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev git
+RUN pip install -U pip poetry==${POETRY_VERSION}
+
+
+FROM base AS virtualenv
+WORKDIR /usr/src/packages
+COPY pyproject.toml poetry.lock ./
+RUN poetry install
+
+RUN ["cat", "/dev/null"]

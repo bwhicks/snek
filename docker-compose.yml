@@ -2,9 +2,7 @@ version: "3.9"
 services:
   vault:
     image: "vault"
-    expose:
-      - "8200"
-  dev:
-    build:
-      context: .
-      dockerfile: Dockerfile-dev
+    ports:
+      - 8200:8200
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=devtoken

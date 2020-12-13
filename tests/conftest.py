@@ -1,16 +1,25 @@
+import logging
 import socket
 from random import randint
-from typing import Callable, Union, Generator
+from time import sleep
+from typing import Callable, Generator, Tuple, Union
+
 import docker
-from docker.models.containers import Container
 import pytest
+import requests
+from docker.models.containers import Container
+
+logger = logging.getLogger(__name__)
 
 
 class TestVaultException(Exception):
+    """An exception when creating Docker container with test Vault."""
+
     pass
 
 
 def get_open_port() -> Union[int, Callable]:
+    """Find an open port and return it or recurse until one is found."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         port = randint(9000, 30000)
         if sock.connect_ex(("localhost", port)):
@@ -18,15 +27,35 @@ def get_open_port() -> Union[int, Callable]:
         return get_open_port()
 
 
-@pytest.fixture
-def test_vault() -> Generator[Container, None, None]:
+@pytest.fixture(scope="session")
+def test_vault() -> Generator[Tuple[int, str], None, None]:
+    """Return port and token of a Dockerized dev vault server."""
     client = docker.from_env()
+    port = get_open_port()
+    token = "devtoken"
     test_container = client.containers.run(
-        "vault", detach=True, ports={8200: get_open_port()}
+        "vault",
+        detach=True,
+        ports={8200: port},
+        environment={"VAULT_DEV_ROOT_TOKEN_ID": token},
     )
-    if isinstance(test_container, Container):
-        yield test_container
-        test_container.stop()
-        test_container.remove()
-    else:
-        raise TestVaultException(test_container)
+
+    # This is really dumb but quickest way to tell vault is answering
+    # requests.
+    up = False
+    retries = 5
+    while not up or not retries:
+        try:
+            requests.get(f"http://localhost:{port}/v1/sys/init")
+            up = True
+        except IOError:
+            sleep(0.01)
+            retries -= 1
+            continue
+
+    if not retries:
+        raise TestVaultException("Test Vault failed to start.")
+
+    yield port, token
+    test_container.stop()
+    test_container.remove()

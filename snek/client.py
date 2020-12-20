@@ -40,11 +40,17 @@ class VaultClient:
             return res.text
 
     def make_request(
-        self, method: str, path: str, **kwargs
+        self, method: str, uri: str, **kwargs
     ) -> Optional[requests.Response]:
-        """Internal method to make requests."""
+        """Internal method to make requests. Returns a :class:`requests.Response` object.
+
+        Args:
+            method: HTTP method to invoke
+            uri: URI to call
+            **kwargs: dictionary of other arguments to pass to request.
+        """
         try:
-            res = self.session.request(method, path, **kwargs)
+            res = self.session.request(method, uri, **kwargs)
         except IOError:
             logging.exception("Connection to Vault failed.")
             return None
@@ -63,7 +69,12 @@ class VaultClient:
     def get(
         self, api_path: str, params: Optional[Dict[str, str]] = None
     ) -> Optional[requests.Response]:
-        """Make a GET request to the appropriate API path."""
+        """Make a GET request to the appropriate API path.
+
+        Args:
+            api_path: the relative API path
+            params: a dictionary of querystring parameters
+        """
         return self.make_request(
             HttpMethod.GET.value, urljoin(self.vault_addr, api_path), params=params
         )
@@ -71,7 +82,12 @@ class VaultClient:
     def put(
         self, api_path: str, data: Optional[Dict[str, Any]] = None
     ) -> Optional[requests.Response]:
-        """Make a PUT request to the given API path."""
+        """Make a PUT request to the given API path.
+
+        Args:
+            api_path: the relative API path
+            data: request data as a dictionary
+        """
         return self.make_request(
             HttpMethod.PUT.value, urljoin(self.vault_addr, api_path), json=data
         )
@@ -79,7 +95,12 @@ class VaultClient:
     def post(
         self, api_path: str, data: Optional[Dict[str, Any]] = None
     ) -> Optional[requests.Response]:
-        """Make a HEAD request to the given API path."""
+        """Make a POST request to the given API path.
+
+        Args:
+            api_path: the relative API path
+            data: request data as a dictionary
+        """
         return self.make_request(
             HttpMethod.POST.value, urljoin(self.vault_addr, api_path), json=data
         )
@@ -87,7 +108,12 @@ class VaultClient:
     def list(
         self, api_path: str, params: Optional[Dict[str, str]] = None
     ) -> Optional[requests.Response]:
-        """Make a LIST request to the given API path."""
+        """Make a LIST request to the given API path.
+
+        Args:
+            api_path: the relative API path
+            params: querystring parameters
+        """
         return self.make_request(
             HttpMethod.LIST.value, urljoin(self.vault_addr, api_path), params=params
         )

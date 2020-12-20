@@ -1,10 +1,11 @@
 from enum import Enum
 
+
 class ValueStringMixin:
-    """Make the str method of an Enum return its value."""
+    """Mixin to make the str method of an Enum return its value."""
+
     def __str__(self):
         return self.value
-
 
 
 class HttpMethod(ValueStringMixin, Enum):
@@ -15,8 +16,6 @@ class HttpMethod(ValueStringMixin, Enum):
     PUT = "PUT"
     HEAD = "HEAD"
     LIST = "LIST"
-
-    
 
 
 class HttpStatusCode(ValueStringMixin, Enum):

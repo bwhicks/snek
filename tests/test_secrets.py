@@ -1,5 +1,5 @@
 import pytest
-from snek.errors import SecretCreateUpdateException, SecretReadException
+from snek.exceptions import SecretCreateUpdateException, SecretReadException
 from snek.secrets import KVSecretV2API
 
 

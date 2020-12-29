@@ -2,7 +2,7 @@ import pytest
 from requests.cookies import morsel_to_cookie
 from snek.client import VaultClient
 from snek.constants import HttpMethod, HttpStatusCode
-from snek.errors import VaultClientException
+from snek.exceptions import VaultClientException
 
 
 @pytest.fixture

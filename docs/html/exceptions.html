@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;no title&gt; &#8212; snek 0.1.0.alpha documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="Constants" href="constants.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <p>Exceptions
+=========+</p>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-snek.exceptions"></span><dl class="py exception">
+<dt id="snek.exceptions.KV2SecretExceptiont">
+<em class="property">exception </em><code class="sig-prename descclassname">snek.exceptions.</code><code class="sig-name descname">KV2SecretExceptiont</code><a class="headerlink" href="#snek.exceptions.KV2SecretExceptiont" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base exception for KV2 secret errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="snek.exceptions.SecretCreateUpdateException">
+<em class="property">exception </em><code class="sig-prename descclassname">snek.exceptions.</code><code class="sig-name descname">SecretCreateUpdateException</code><a class="headerlink" href="#snek.exceptions.SecretCreateUpdateException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error creating or updating a secret.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="snek.exceptions.SecretReadException">
+<em class="property">exception </em><code class="sig-prename descclassname">snek.exceptions.</code><code class="sig-name descname">SecretReadException</code><a class="headerlink" href="#snek.exceptions.SecretReadException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error getting a secret.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="snek.exceptions.SnekException">
+<em class="property">exception </em><code class="sig-prename descclassname">snek.exceptions.</code><code class="sig-name descname">SnekException</code><a class="headerlink" href="#snek.exceptions.SnekException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for errors raised by the snek module.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="snek.exceptions.UnboundModelError">
+<em class="property">exception </em><code class="sig-prename descclassname">snek.exceptions.</code><code class="sig-name descname">UnboundModelError</code><a class="headerlink" href="#snek.exceptions.UnboundModelError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when a model is not bound to an API and a method is called that
+requires this.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="snek.exceptions.VaultClientException">
+<em class="property">exception </em><code class="sig-prename descclassname">snek.exceptions.</code><code class="sig-name descname">VaultClientException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">status_code</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#snek.exceptions.VaultClientException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error with client communication.</p>
+</dd></dl>
+
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">snek</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secrets.html">Secrets</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="constants.html" title="previous chapter">Constants</a></li>
+      <li>Next: <a href="models.html" title="next chapter">Models</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Benjamin Hicks.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/exceptions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

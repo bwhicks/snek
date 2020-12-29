@@ -6,12 +6,14 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import os
+import sys
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
+import snek
 
 sys.path.insert(0, os.path.abspath("../snek"))
 
@@ -23,7 +25,7 @@ copyright = "2020, Benjamin Hicks"
 author = "Benjamin Hicks"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+release = snek.__version__
 
 
 # -- General configuration ---------------------------------------------------

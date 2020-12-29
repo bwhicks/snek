@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 import requests
 
 from .constants import HttpMethod, HttpStatusCode
-from .errors import VaultClientException
+from .exceptions import VaultClientException
 from .models import VaultResponse
 
 logger = logging.getLogger(__name__)

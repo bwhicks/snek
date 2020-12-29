@@ -12,6 +12,10 @@ Welcome to snek's documentation!
 
    client
    constants
+   exceptions
+   models
+   secrets
+
 
 
 

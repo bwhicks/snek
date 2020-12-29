@@ -2,7 +2,7 @@ import json
 from typing import Any, Dict, Optional
 
 from .client import VaultClient
-from .errors import (
+from .exceptions import (
     SecretCreateUpdateException,
     SecretReadException,
     VaultClientException,
@@ -13,11 +13,17 @@ from .models import VaultResponse
 class KVSecretV2:
     """Representation of a secret returned from the KV2 engine"""
 
+    #: Vault path
+    path: str
+    #: version (if given)
+    version: Optional[int]
+    #: raw response from Vault for secret path
+    vault_response: Optional[VaultResponse]
+
     def __init__(
         self,
         path: str,
         version: Optional[int] = None,
-        options: Optional[Dict[str, Any]] = None,
         vault_response: Optional[VaultResponse] = None,
     ):
         if vault_response is not None:
@@ -25,12 +31,12 @@ class KVSecretV2:
             self.data = vault_response.response["data"]
         else:
             self.data = None
-        self.options = options if options is not None else {}
         self.path = path
         self.version = version
 
     @property
     def value(self) -> Dict[str, Any]:
+        """Value of the secret."""
         return self.data["data"] if "data" in self.data else None
 
     def __str__(self) -> str:

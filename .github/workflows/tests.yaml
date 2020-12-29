@@ -18,3 +18,7 @@ jobs:
         run: poetry run pytest
       - name: Run mypy
         run: poetry run mypy -m snek
+      - name: Build docs
+        run: |
+          cd doc_src 
+          make github

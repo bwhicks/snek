@@ -68,7 +68,10 @@ class VaultClient:
         ]:
             text = self._get_text(res)
             raise VaultClientException(f"{res.status_code}: {text}")
-        return VaultResponse(response=res.json(), status_code=res.status_code)
+        return VaultResponse(
+            response=res.json() if code != HttpStatusCode.SUCCESS_NO_DATA else {},
+            status_code=res.status_code,
+        )
 
     def get(
         self, api_path: str, params: Optional[Dict[str, Optional[str]]] = None

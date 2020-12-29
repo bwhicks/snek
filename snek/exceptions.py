@@ -17,7 +17,7 @@ class VaultClientException(SnekException):
         self.status_code = status_code
 
 
-class KV2SecretExceptiont(SnekException):
+class KV2SecretException(SnekException):
     """Base exception for KV2 secret errors."""
 
 

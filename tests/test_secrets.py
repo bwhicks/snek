@@ -9,6 +9,9 @@ def test_kv2(test_client):
 
 
 class TestKVSecretV2:
+    def test_configure(self, test_kv2):
+        test_kv2.configure({"max_versions": 2})
+
     def test_create_or_update(self, test_kv2):
         assert test_kv2.create_or_update("foo/bar", {"foo": "bar"})
 

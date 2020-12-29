@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional
 
 from .client import VaultClient
 from .exceptions import (
+    KV2SecretException,
     SecretCreateUpdateException,
     SecretReadException,
     VaultClientException,
@@ -49,8 +50,16 @@ class KVSecretV2API:
     def __init__(self, client: VaultClient, mount_path: str = "secret"):
 
         self.client = client
-        self.base_path = f"/v1/{mount_path}/data"
-        self.base_metadata_path = f"/v1/{mount_path}/metadata"
+        self.mount_path = f"/v1/{mount_path}"
+        self.base_path = f"{self.mount_path}/data"
+        self.base_metadata_path = f"{self.mount_path}/metadata"
+
+    def configure(self, configuration: Dict[str, Any]) -> VaultResponse:
+
+        try:
+            return self.client.post(f"{self.mount_path}/config", data=configuration)
+        except VaultClientException:
+            raise KV2SecretException("Failed to configure KV-V2 engine.")
 
     def read(self, path: str, version: Optional[int] = None) -> Optional[KVSecretV2]:
         """Get a secret at a given path.

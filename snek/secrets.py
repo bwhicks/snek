@@ -60,7 +60,8 @@ class KVSecretV2API:
         """
         try:
             res = self.client.get(
-                f"{self.base_path}/{path}", params={"version": str(version)}
+                f"{self.base_path}/{path}",
+                params={"version": str(version) if version is not None else version},
             )
             return KVSecretV2(vault_response=res, path=path)
         except VaultClientException:

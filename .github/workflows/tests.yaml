@@ -17,7 +17,7 @@ jobs:
       - name: Run pytest
         run: poetry run pytest
       - name: Run mypy
-        run: poetry run mypy -m snek
+        run: poetry run mypy -p snek
       - name: Build docs
         run: |
           cd doc_src 

@@ -8,6 +8,7 @@ import docker
 import pytest
 import requests
 from docker.models.containers import Container
+from snek.client import VaultClient
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ def get_open_port() -> Union[int, Callable]:
 
 
 @pytest.fixture(scope="session")
-def test_vault() -> Generator[Tuple[int, str], None, None]:
+def vault_conn() -> Generator[Tuple[int, str], None, None]:
     """Return port and token of a Dockerized dev vault server."""
     client = docker.from_env()
     port = get_open_port()
@@ -59,3 +60,19 @@ def test_vault() -> Generator[Tuple[int, str], None, None]:
     yield port, token
     test_container.stop()
     test_container.remove()
+
+
+@pytest.fixture
+def test_vault(vault_conn):
+    port, token = vault_conn
+    yield vault_conn
+    requests.delete(
+        f"http://localhost:{port}/v1/secret/metadata/foo/bar",
+        headers={"X-Vault-Token": token},
+    )
+
+
+@pytest.fixture
+def test_client(test_vault):
+    port, token = test_vault
+    return VaultClient(f"http://localhost:{port}/", token)

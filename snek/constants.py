@@ -16,6 +16,7 @@ class HttpMethod(ValueStringMixin, Enum):
     PUT = "PUT"
     HEAD = "HEAD"
     LIST = "LIST"
+    DELETE = "DELETE"
 
 
 class HttpStatusCode(ValueStringMixin, Enum):

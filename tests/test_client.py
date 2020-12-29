@@ -2,6 +2,7 @@ import pytest
 from requests.cookies import morsel_to_cookie
 from snek.client import VaultClient
 from snek.constants import HttpMethod, HttpStatusCode
+from snek.errors import VaultClientException
 
 
 @pytest.fixture
@@ -20,25 +21,25 @@ def mock_request(mocker):
 
 
 @pytest.mark.vault
-def test_make_request(test_vault):
-    port, token = test_vault
-    client = VaultClient(f"http://localhost:{port}/", token)
-    res = client.make_request(
-        "GET", f"http://localhost:{port}/v1/sys/init", params={"X-Vault-Token": None}
+def test_make_request(test_client):
+    res = test_client.make_request(
+        "GET",
+        f"{test_client.vault_addr}v1/sys/init",
+        params={"X-Vault-Token": None},
     )
-    assert HttpStatusCode(res.status_code) == HttpStatusCode.SUCCESS_DATA
-    assert res.json()["initialized"] is True
+    assert res.status_code == HttpStatusCode.SUCCESS_DATA
+    assert res.response["initialized"] is True
 
 
 def test_make_request_error(mock_http_call):
     mock_http_call.side_effect = IOError("Connection failure")
     client = VaultClient("http://localhost:8200/", "abc123")
-    res = client.make_request(
-        HttpMethod.GET.value,
-        "http://localhost:8200/v1/sys/init",
-        params={"X-Vault-Token": None},
-    )
-    assert res is None
+    with pytest.raises(VaultClientException, match="Connection failure"):
+        client.make_request(
+            HttpMethod.GET.value,
+            "http://localhost:8200/v1/sys/init",
+            params={"X-Vault-Token": None},
+        )
 
 
 def test_make_request_bad_code(mocker, mock_http_call):
@@ -46,12 +47,12 @@ def test_make_request_bad_code(mocker, mock_http_call):
     mock_http_call.return_value.status_code = HttpStatusCode.FORBIDDEN.value
     mock_http_call.return_value.json.return_value = {"foo": "bar"}
     client = VaultClient("http://localhost:8200/", "abc123")
-    res = client.make_request(
-        HttpMethod.GET.value,
-        "http://localhost:8200/v1/sys/init",
-        params={"X-Vault-Token": None},
-    )
-    assert res is None
+    with pytest.raises(VaultClientException, match='{"foo": "bar"}'):
+        client.make_request(
+            HttpMethod.GET.value,
+            "http://localhost:8200/v1/sys/init",
+            params={"X-Vault-Token": None},
+        )
 
 
 def test_get(mock_client):

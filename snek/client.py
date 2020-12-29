@@ -71,7 +71,7 @@ class VaultClient:
         return VaultResponse(response=res.json(), status_code=res.status_code)
 
     def get(
-        self, api_path: str, params: Optional[Dict[str, str]] = None
+        self, api_path: str, params: Optional[Dict[str, Optional[str]]] = None
     ) -> VaultResponse:
         """Make a GET request to the appropriate API path.
 

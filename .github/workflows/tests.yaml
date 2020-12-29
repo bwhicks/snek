@@ -18,6 +18,8 @@ jobs:
         run: poetry run pytest
       - name: Run mypy
         run: poetry run mypy -p snek
+      - name: Configure sphinxbuild path
+        run: echo "SPHINXBUILD=poetry run sphinx-build" >> $GITHUB_ENV
       - name: Build docs
         run: |
           cd doc_src 

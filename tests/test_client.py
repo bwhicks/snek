@@ -20,6 +20,11 @@ def mock_request(mocker):
     return mocker.patch("snek.client.VaultClient.make_request")
 
 
+def test_namespace():
+    client = VaultClient("http://localhost:8200/", "abc12", namespace="foo")
+    assert client.session.headers["X-Vault-Namespace"] == "foo"
+
+
 @pytest.mark.vault
 def test_make_request(test_client):
     res = test_client.make_request(
@@ -53,6 +58,19 @@ def test_make_request_bad_code(mocker, mock_http_call):
             "http://localhost:8200/v1/sys/init",
             params={"X-Vault-Token": None},
         )
+
+
+def test_make_request_no_data(mocker, mock_http_call):
+    mock_http_call.return_value.status_code = HttpStatusCode.SUCCESS_NO_DATA.value
+    mock_http_call.return_value.text = b""
+    client = VaultClient("http://localhost:8200/", "abc123")
+    res = client.make_request(
+        HttpMethod.GET.value,
+        "http://localhost:8200/v1/sys/init",
+        params={"X-Vault-Token": None},
+    )
+    assert res.response == {}
+    assert res.status_code == HttpStatusCode.SUCCESS_NO_DATA
 
 
 def test_get(mock_client):
@@ -90,4 +108,12 @@ def test_list(mock_client):
         HttpMethod.LIST.value,
         "http://localhost:8200/v1/sys/madeup",
         params={"foo": "bar"},
+    )
+
+
+def test_delete(mock_client):
+    res = mock_client.delete("/v1/sys/madeup")
+    assert res is mock_client.make_request.return_value
+    mock_client.make_request.assert_called_with(
+        HttpMethod.DELETE.value, "http://localhost:8200/v1/sys/madeup", params=None
     )

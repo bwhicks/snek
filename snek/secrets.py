@@ -41,7 +41,7 @@ class KVSecretV2:
         return self.data["data"] if "data" in self.data else None
 
     def __str__(self) -> str:
-        return f"{json.dumps(self.data)}"
+        return f"{self.path}: {json.dumps(self.data)}"
 
 
 class KVSecretV2API:
@@ -54,8 +54,17 @@ class KVSecretV2API:
         self.base_path = f"{self.mount_path}/data"
         self.base_metadata_path = f"{self.mount_path}/metadata"
 
-    def configure(self, configuration: Dict[str, Any]) -> VaultResponse:
-
+    def configure(
+        self,
+        max_versions: int = 0,
+        cas_required: bool = False,
+        delete_version_after: str = "0s",
+    ) -> VaultResponse:
+        configuration = {
+            "max_versions": max_versions,
+            "cas_required": cas_required,
+            "delete_version_after": delete_version_after,
+        }
         try:
             return self.client.post(f"{self.mount_path}/config", data=configuration)
         except VaultClientException:

@@ -1,5 +1,6 @@
+import json
+
 import pytest
-from requests.cookies import morsel_to_cookie
 from snek.client import VaultClient
 from snek.constants import HttpMethod, HttpStatusCode
 from snek.exceptions import VaultClientException
@@ -62,6 +63,7 @@ def test_make_request_bad_code(mocker, mock_http_call):
 
 def test_make_request_no_data(mocker, mock_http_call):
     mock_http_call.return_value.status_code = HttpStatusCode.SUCCESS_NO_DATA.value
+    mock_http_call.return_value.json.side_effect = json.JSONDecodeError
     mock_http_call.return_value.text = b""
     client = VaultClient("http://localhost:8200/", "abc123")
     res = client.make_request(

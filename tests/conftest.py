@@ -76,3 +76,10 @@ def test_vault(vault_conn):
 def test_client(test_vault):
     port, token = test_vault
     return VaultClient(f"http://localhost:{port}/", token)
+
+
+@pytest.fixture
+def mock_http_call(mocker):
+    mock_request = mocker.patch("snek.client.requests.Session.request")
+    mock_request.return_value.json.return_value = {}
+    return mock_request

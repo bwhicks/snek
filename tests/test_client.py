@@ -7,11 +7,6 @@ from snek.exceptions import VaultClientException
 
 
 @pytest.fixture
-def mock_http_call(mocker):
-    return mocker.patch("snek.client.requests.Session.request")
-
-
-@pytest.fixture
 def mock_client(mock_request):
     return VaultClient("http://localhost:8200/", "abc123")
 
@@ -61,9 +56,8 @@ def test_make_request_bad_code(mocker, mock_http_call):
         )
 
 
-def test_make_request_no_data(mocker, mock_http_call):
+def test_make_request_no_data(mock_http_call):
     mock_http_call.return_value.status_code = HttpStatusCode.SUCCESS_NO_DATA.value
-    mock_http_call.return_value.json.side_effect = json.JSONDecodeError
     mock_http_call.return_value.text = b""
     client = VaultClient("http://localhost:8200/", "abc123")
     res = client.make_request(
@@ -73,6 +67,19 @@ def test_make_request_no_data(mocker, mock_http_call):
     )
     assert res.response == {}
     assert res.status_code == HttpStatusCode.SUCCESS_NO_DATA
+
+
+def test_make_request_bad_no_json(mock_http_call):
+    mock_http_call.return_value.status_code = HttpStatusCode.FORBIDDEN.value
+    mock_http_call.return_value.json.side_effect = json.JSONDecodeError("foo", "bar", 2)
+    mock_http_call.return_value.text = ""
+    client = VaultClient("http://localhost:8200/", "abc123")
+    with pytest.raises(VaultClientException, match="403:"):
+        client.make_request(
+            HttpMethod.GET.value,
+            "http://localhost:8200/v1/sys/init",
+            params={"X-Vault-Token": None},
+        )
 
 
 def test_get(mock_client):

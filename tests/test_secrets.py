@@ -1,6 +1,11 @@
 import pytest
 from snek.constants import HttpStatusCode
-from snek.exceptions import SecretCreateUpdateException, SecretReadException
+from snek.exceptions import (
+    KV2SecretException,
+    SecretCreateUpdateException,
+    SecretReadException,
+    VaultClientException,
+)
 from snek.secrets import KVSecretV2, KVSecretV2API
 
 
@@ -35,6 +40,12 @@ class TestKVSecretV2:
         test_kv2.configure()
         res = test_kv2.configure(max_versions=3)
         assert res.status_code == HttpStatusCode.SUCCESS_NO_DATA
+
+    def test_configure_secret_engine_fails(self, mock_http_call, test_kv2):
+
+        mock_http_call.return_value.status_code = 403
+        with pytest.raises(KV2SecretException):
+            test_kv2.configure()
 
     def test_empty_secret(self):
         kv2 = KVSecretV2("foo/bar")
